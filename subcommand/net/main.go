@@ -12,7 +12,7 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/docktermj/mock-server/common/help"
+	"github.com/docktermj/mock-proxy/common/help"
 	"github.com/docopt/docopt-go"
 )
 
