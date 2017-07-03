@@ -1,15 +1,15 @@
 package port
 
 import (
-	"github.com/docktermj/mock-relay/common/runner"
-	"github.com/docktermj/mock-relay/subcommand/port/socket"
+	"github.com/docktermj/mock-proxy/common/runner"
+	"github.com/docktermj/mock-proxy/subcommand/port/socket"
 )
 
 func Command(argv []string) {
 
 	usage := `
 Usage:
-    mock-relay port <subcommand> [<args>...]
+    mock-proxy port <subcommand> [<args>...]
 
 Subcommands:
     socket    Relay to a socket

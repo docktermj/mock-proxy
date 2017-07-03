@@ -9,7 +9,7 @@ import (
 	"strings"
 	"strconv"
 
-	"github.com/docktermj/mock-relay/common/help"
+	"github.com/docktermj/mock-proxy/common/help"
 	"github.com/docopt/docopt-go"
 )
 
@@ -30,7 +30,7 @@ func Command(argv []string) {
 
 	usage := `
 Usage:
-    mock-relay port socket [options] 
+    mock-proxy port socket [options] 
 
 Options:
    -h, --help

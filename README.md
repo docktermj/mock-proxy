@@ -1,19 +1,19 @@
-# mock-relay
+# mock-proxy
 
-Build `mock-relay-M.m.P-I.x86_64.rpm`
-and   `mock-relay_M.m.P-I_amd64.deb`
+Build `mock-proxy-M.m.P-I.x86_64.rpm`
+and   `mock-proxy_M.m.P-I_amd64.deb`
 where "M.m.P-I" is Major.minor.Patch-Iteration.
 
 ## Usage
 
-A program that simulates servers:
+That acts as a proxy.
 
-1. Unix Domain Socket server
+It is a server of requests, and forwards them as if it's a client.
 
 ### Invocation
 
 ```console
-mock-relay socket --socket-file /var/run/xyz.sock
+mock-proxy socket --inbound-network <network_type> --inbound-address <inboundAddress> --outbound-network <network_type>  --outbound-address <outboundAddress>
 ```
 
 ## Development
@@ -33,13 +33,13 @@ export PROJECT_DIR=${GOPATH}/src/github.com/docktermj
 ```console
 mkdir -p ${PROJECT_DIR}
 cd ${PROJECT_DIR}
-git clone git@github.com:docktermj/mock-relay.git
+git clone git@github.com:docktermj/mock-proxy.git
 ```
 
 #### Download dependencies
 
 ```console
-cd ${PROJECT_DIR}/mock-relay
+cd ${PROJECT_DIR}/mock-proxy
 make dependencies
 ```
 
@@ -48,7 +48,7 @@ make dependencies
 #### Local build
 
 ```console
-cd ${PROJECT_DIR}/mock-relay
+cd ${PROJECT_DIR}/mock-proxy
 make build-local
 ```
 
@@ -57,7 +57,7 @@ The results will be in the `${GOPATH}/bin` directory.
 #### Docker build
 
 ```console
-cd ${PROJECT_DIR}/mock-relay
+cd ${PROJECT_DIR}/mock-proxy
 make build
 ```
 
@@ -66,7 +66,7 @@ The results will be in the `.../target` directory.
 ### Test
 
 ```console
-cd ${PROJECT_DIR}/mock-relay
+cd ${PROJECT_DIR}/mock-proxy
 make test-local
 ```
 
@@ -81,7 +81,7 @@ Example distributions: openSUSE, Fedora, CentOS, Mandrake
 Example:
 
 ```console
-sudo rpm -ivh mock-relay-M.m.P-I.x86_64.rpm
+sudo rpm -ivh mock-proxy-M.m.P-I.x86_64.rpm
 ```
 
 ##### RPM Update
@@ -89,7 +89,7 @@ sudo rpm -ivh mock-relay-M.m.P-I.x86_64.rpm
 Example: 
 
 ```console
-sudo rpm -Uvh mock-relay-M.m.P-I.x86_64.rpm
+sudo rpm -Uvh mock-proxy-M.m.P-I.x86_64.rpm
 ```
 
 #### Debian
@@ -101,7 +101,7 @@ Example distributions: Ubuntu
 Example:
 
 ```console
-sudo dpkg -i mock-relay_M.m.P-I_amd64.deb
+sudo dpkg -i mock-proxy_M.m.P-I_amd64.deb
 ```
 
 ### Cleanup

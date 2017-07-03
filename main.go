@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/docktermj/mock-relay/common/runner"
-	"github.com/docktermj/mock-relay/subcommand/net"
-	"github.com/docktermj/mock-relay/subcommand/port"
+	"github.com/docktermj/mock-proxy/common/runner"
+	"github.com/docktermj/mock-proxy/subcommand/net"
+	"github.com/docktermj/mock-proxy/subcommand/port"
 	"github.com/docopt/docopt-go"
 )
 
@@ -21,16 +21,16 @@ var buildIteration string = "0"
 func main() {
 	usage := `
 Usage:
-    mock-relay [--version] [--help] <command> [<args>...]
+    mock-proxy [--version] [--help] <command> [<args>...]
 
 Options:
-   -h, --help
+    -h, --help
 
-The mock-relay commands are:
-   net    Relay through different types of networks
-   port   Relay through a port
+The mock-proxy commands are:
+    net    Relay through different types of networks
+    port   Relay through a port
 
-See 'mock-relay <command> --help' for more information on a specific command.
+See 'mock-proxy <command> --help' for more information on a specific command.
 `
 	// DocOpt processing.
 
