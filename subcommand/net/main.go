@@ -5,7 +5,6 @@ package net
 
 import (
 	"fmt"
-	"io"
 	"log"
 	"net"
 	"os"
@@ -26,6 +25,7 @@ func proxy(inbound net.Conn, outbound net.Conn) {
 
 		numberOfBytesRead, err := inbound.Read(byteBuffer)
 		if err != nil {
+			log.Println("Proxy Read return")
 			return
 		}
 
@@ -38,63 +38,8 @@ func proxy(inbound net.Conn, outbound net.Conn) {
 
 		_, err = outbound.Write([]byte(message))
 		if err != nil {
-			log.Fatal("Error writing to server:", err)
-		}
-	}
-}
-
-// Read a message from the client and forward to the server.
-func outboundTraffic(inboundConnection net.Conn, outboundConnection io.Reader) {
-	byteBuffer := make([]byte, 1024)
-	for {
-
-		// Read the outbound network connection.
-
-		numberOfBytesRead, err := outboundConnection.Read(byteBuffer)
-		if err != nil {
+			log.Println("Proxy Write return")
 			return
-		}
-
-		// Print what was received and sent.
-
-		inboundMessage := byteBuffer[0:numberOfBytesRead]
-		fmt.Println("<<<", string(inboundMessage))
-		outboundMessage := fmt.Sprintf("Response: \"%s\"", inboundMessage)
-		fmt.Println(">>>", outboundMessage)
-
-		// Write to inbound network connection.
-
-		_, err = inboundConnection.Write([]byte(outboundMessage))
-		if err != nil {
-			log.Printf("Error writing to client:", err)
-		}
-	}
-}
-
-// Read a message from the server and return to the client.
-func inboundTraffic(inboundNetworkConnection net.Conn, outboundNetworkConnection net.Conn) {
-	byteBuffer := make([]byte, 1024)
-	for {
-
-		// Read the inbound network connection.
-
-		numberOfBytesRead, err := inboundNetworkConnection.Read(byteBuffer)
-		if err != nil {
-			return
-		}
-
-		// Print what was received and sent.
-
-		inboundMessage := byteBuffer[0:numberOfBytesRead]
-		fmt.Println(">>>", string(inboundMessage))
-		outboundMessage := fmt.Sprintf("Request: \"%s\"", inboundMessage)
-		fmt.Println("<<<", outboundMessage)
-
-		// Write to outbound network connection.
-
-		_, err = outboundNetworkConnection.Write([]byte(outboundMessage))
-		if err != nil {
-			log.Fatal("Error writing to server:", err)
 		}
 	}
 }
@@ -157,12 +102,11 @@ Where:
 	outboundAddress := args["--outbound-address"].(string)
 	isDebug := args["--debug"].(bool)
 
-	// ...
+	// Debugging information.
 
 	if isDebug {
 		log.Printf("Listening on '%s' network with address '%s'", inboundNetwork, inboundAddress)
 		log.Printf("Sending   to '%s' network with address '%s'", outboundNetwork, outboundAddress)
-
 	}
 
 	// Inbound listener.  net.Listen creates a server.
@@ -183,22 +127,32 @@ Where:
 		os.Exit(0)
 	}(inboundListener, sigc)
 
-	// Outbound network connection.  net.Dial creates a client.
-
-	outboundConnection, err := net.Dial(outboundNetwork, outboundAddress)
-	if err != nil {
-		log.Fatal("Dial error", err)
-	}
-	defer outboundConnection.Close()
-
 	// As a server, Read and Echo loop.
 
 	for {
+
+		// As a server, listen for a connection request.
+
 		inboundConnection, err := inboundListener.Accept()
 		if err != nil {
 			log.Fatal("Accept error: ", err)
 		}
+		if isDebug {
+			log.Println("Accepted inbound connection.")
+		}
+
+		// Create a new outbound network connection.  net.Dial creates a client.
+
+		outboundConnection, err := net.Dial(outboundNetwork, outboundAddress)
+		if err != nil {
+			log.Fatal("Dial error", err)
+		}
+		defer outboundConnection.Close()
+
+		// Asynchronously handle bi-directional traffic.
+
 		go proxy(inboundConnection, outboundConnection)
 		go proxy(outboundConnection, inboundConnection)
+
 	}
 }

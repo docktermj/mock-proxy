@@ -5,7 +5,7 @@ package runner
 // Reference: http://stackoverflow.com/questions/6769020/go-map-of-functions
 
 import (
-	"github.com/docktermj/mock-server/common/help"
+	"github.com/docktermj/mock-proxy/common/help"
 )
 
 func Run(argv []string, functions map[string]interface{}, usage string) {

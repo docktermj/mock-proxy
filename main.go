@@ -6,7 +6,6 @@ import (
 
 	"github.com/docktermj/mock-proxy/common/runner"
 	"github.com/docktermj/mock-proxy/subcommand/net"
-	"github.com/docktermj/mock-proxy/subcommand/port"
 	"github.com/docopt/docopt-go"
 )
 
@@ -28,7 +27,6 @@ Options:
 
 The mock-proxy commands are:
     net    Relay through different types of networks
-    port   Relay through a port
 
 See 'mock-proxy <command> --help' for more information on a specific command.
 `
@@ -50,8 +48,7 @@ See 'mock-proxy <command> --help' for more information on a specific command.
 	// Reference: http://stackoverflow.com/questions/6769020/go-map-of-functions
 
 	functions := map[string]interface{}{
-		"net":  net.Command,
-		"port": port.Command,
+		"net": net.Command,
 	}
 
 	runner.Run(argv, functions, usage)
